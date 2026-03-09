@@ -277,7 +277,7 @@ export default function App() {
     const isBoolean = currentIngredient.isBoolean
     return (
       <div className="flex h-svh w-full flex-col items-center gap-12">
-        <p className="mt-8 capitalize opacity-70">{location}</p>
+        <p className="font-rounded mt-8 capitalize opacity-70">{location}</p>
         {isBoolean ? (
           <>
             <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
@@ -360,7 +360,7 @@ export default function App() {
             Submit
           </button>
         )}
-        {ingredientIndex > 1 && (
+        {ingredientIndex > 0 && (
           <button
             className="border-shadow mt-auto mb-12 rounded-full px-6 py-2.5 text-lg"
             onMouseDown={goBack}
