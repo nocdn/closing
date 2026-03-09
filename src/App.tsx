@@ -1,6 +1,6 @@
 import NumberFlow from "@number-flow/react"
 import { Minus, Plus } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function App() {
   let ingredients = {
@@ -10,9 +10,9 @@ export default function App() {
       { id: "white", ideal: 8, have: 0, name: "White Chocolate" },
       { id: "terrys", ideal: 3, have: 0, name: "Chocolate Orange" },
       { id: "mars", ideal: 10, have: 0, name: "Mars Bar" },
-      { id: "nutella", ideal: 10, have: 0, name: "Nutella" },
-      { id: "peanut", ideal: 1, have: 0, name: "Peanut Butter" },
-      { id: "biscoff", ideal: 3, have: 0, name: "Biscoff" },
+      { id: "nutella", ideal: 10, have: 0, name: "Nutella", extraInfo: "jars" },
+      { id: "peanut", ideal: 1, have: 0, name: "Peanut Butter", extraInfo: "jars" },
+      { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
       { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
       { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
       { id: "maple", ideal: 0, have: 0, name: "Maple Syrup" },
@@ -42,12 +42,20 @@ export default function App() {
         have: 0,
         name: "Chopped Nuts",
         messageName: "CHOPPED NUTS",
-        extraInfo: "just is there a bag",
+        extraInfo: "is there a bag",
+        isBoolean: true,
       },
-      { id: "walnut", ideal: 1, have: 0, name: "Walnuts" },
+      {
+        id: "walnut",
+        ideal: 1,
+        have: 0,
+        name: "Walnuts",
+        extraInfo: "some walnuts in the bag",
+        isBoolean: true,
+      },
       { id: "passata", ideal: 1, have: 0, name: "Passata", extraInfo: "1 full" },
-      { id: "pesto", ideal: 2, have: 0, name: "Pesto" },
-      { id: "oil", ideal: 1, have: 0, name: "Oil" },
+      { id: "pesto", ideal: 2, have: 0, name: "Pesto", extraInfo: "full" },
+      { id: "oil", ideal: 1, have: 0, name: "Oil", extraInfo: "full" },
       { id: "bigCones", ideal: 3, have: 0, name: "Big Cones", messageName: "BIG CONES" },
       { id: "napkins", ideal: 3, have: 0, name: "Napkins" },
       {
@@ -68,6 +76,7 @@ export default function App() {
         name: "Rubbish Bags",
         messageName: "RUBBISH BAGS 1/2 roll",
         extraInfo: "1/2 roll",
+        isBoolean: true,
       },
       { id: "spray", ideal: 2, have: 0, name: "Spray" },
       {
@@ -75,7 +84,7 @@ export default function App() {
         ideal: 2,
         have: 0,
         name: "Gloves (L, M)",
-        extraInfo: "do we have both sizes",
+        extraInfo: "both sizes",
         isBoolean: true,
       },
       {
@@ -93,21 +102,25 @@ export default function App() {
   }
 
   const [location, setLocation] = useState<"" | "ousegate" | "kings">("")
+  const [isDone, setIsDone] = useState(false)
   const [ingredientIndex, setIngredientIndex] = useState<number>(0)
-  const [inputValue, setInputValue] = useState<number>(0)
+
+  const [haveAmount, setHaveAmount] = useState(0)
 
   function submitAmount() {
-    ingredients.ousegate[ingredientIndex].have = inputValue
-    setInputValue(0)
+    setHaveAmount(0)
     console.log("currently at index", ingredientIndex)
     console.log("length of ingredients", ingredients.ousegate.length)
     if (ingredientIndex === ingredients.ousegate.length - 1) {
       console.log("going to createMessage")
       createMessage(location)
+      setIsDone(true)
+      setLocation("")
     } else {
       console.log("increaseing index")
       setIngredientIndex((prev) => prev + 1)
     }
+    console.log(ingredients)
   }
 
   function createMessage(location: "ousegate" | "kings" | "") {
@@ -131,14 +144,16 @@ export default function App() {
   }
 
   function increaseAmount() {
-    if (inputValue < 10) {
-      setInputValue((prev) => prev + 1)
+    if (location !== "" && ingredients[location][ingredientIndex].have < 10) {
+      ingredients[location][ingredientIndex].have += 1
+      setHaveAmount((prev) => prev + 1)
     }
   }
 
   function decreaseAmount() {
-    if (inputValue > 0) {
-      setInputValue((prev) => prev - 1)
+    if (location !== "" && ingredients[location][ingredientIndex].have > 0) {
+      ingredients[location][ingredientIndex].have -= 1
+      setHaveAmount((prev) => prev - 1)
     }
   }
 
@@ -148,16 +163,32 @@ export default function App() {
     return (
       <div className="mt-8 flex h-svh w-full flex-col items-center gap-12">
         <p className="capitalize opacity-70">{location}</p>
-        <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
-          How much{" "}
-          <span className="text-blue-500">{ingredients[location][ingredientIndex]?.name}</span>{" "}
-          <span className="text-amber-600/80">
-            {ingredients[location][ingredientIndex].extraInfo && (
-              <>({ingredients[location][ingredientIndex]?.extraInfo})</>
-            )}
-          </span>{" "}
-          do we have?
-        </p>
+        {isBoolean ? (
+          <>
+            <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
+              Do we have{" "}
+              <span className="text-blue-500">{ingredients[location][ingredientIndex]?.name}</span>{" "}
+              <span className="opacity-50">
+                {ingredients[location][ingredientIndex].extraInfo && (
+                  <>({ingredients[location][ingredientIndex]?.extraInfo})</>
+                )}
+              </span>{" "}
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
+              How much{" "}
+              <span className="text-blue-500">{ingredients[location][ingredientIndex]?.name}</span>{" "}
+              <span className="text-amber-600/80">
+                {ingredients[location][ingredientIndex].extraInfo && (
+                  <>({ingredients[location][ingredientIndex]?.extraInfo})</>
+                )}
+              </span>{" "}
+              do we have?
+            </p>
+          </>
+        )}
 
         <div className="flex items-center gap-8">
           {isBoolean ? (
@@ -186,7 +217,7 @@ export default function App() {
                 <Minus size={30} />
               </button>
               <div className="grid w-12 place-content-center text-4xl">
-                <NumberFlow value={inputValue} />
+                <NumberFlow value={haveAmount} />
               </div>
               <button className="rounded-xl p-5 ring ring-white/15" onMouseDown={increaseAmount}>
                 <Plus size={30} />
@@ -212,7 +243,7 @@ export default function App() {
 
   return (
     <main className="flex flex-col items-center text-[16px]">
-      {location === "" && (
+      {location === "" && !isDone && (
         <div className="grid h-svh w-screen place-content-center">
           <div id="buttons-container" className="flex flex-col items-center justify-center gap-5">
             <button
@@ -236,6 +267,23 @@ export default function App() {
         </div>
       )}
       {location !== "" && stagedElements(location)}
+      {isDone && (
+        <div className="flex h-svh flex-col items-center justify-center gap-10">
+          <p className="font-rounded w-full px-8 text-center text-5xl leading-[70px] font-medium">
+            Message Copied!
+          </p>
+          <button
+            onMouseDown={() => {
+              setLocation("")
+              setIsDone(false)
+              setIngredientIndex(0)
+            }}
+            className="border-shadow font-rounded rounded-full bg-[#FEFEFE] px-6 py-3 text-lg font-medium"
+          >
+            Start Again
+          </button>
+        </div>
+      )}
     </main>
   )
 }
