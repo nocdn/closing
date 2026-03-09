@@ -1,6 +1,6 @@
 import NumberFlow from "@number-flow/react"
 import { Minus, Plus } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export default function App() {
   let ingredients = {
@@ -235,10 +235,6 @@ export default function App() {
         )}
       </div>
     )
-  }
-
-  function finishScreen() {
-    return <></>
   }
 
   return (
