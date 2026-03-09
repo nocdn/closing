@@ -18,7 +18,14 @@ export default function App() {
       { id: "maple", ideal: 0, have: 0, name: "Maple Syrup" },
       { id: "golden", ideal: 2, have: 0, name: "Golden Syrup" },
       { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
-      { id: "sugar", ideal: 2, have: 0, name: "Sugar", extraInfo: "1 open, 1 full" },
+      {
+        id: "sugar",
+        ideal: 1,
+        have: 0,
+        name: "Sugar",
+        extraInfo: "1 open, 1 full",
+        isBoolean: true,
+      },
       { id: "lemon", ideal: 1, have: 0, name: "Lemon Juice", extraInfo: "1 full" },
       { id: "cinnamon", ideal: null, have: 0, name: "Cinnamon" },
       { id: "marshmallows", ideal: 1, have: 0, name: "Marshmallows" },
@@ -98,7 +105,104 @@ export default function App() {
       },
       { id: "roll", ideal: 1, have: 0, name: "Roll" },
     ],
-    kings: [],
+    kings: [
+      { id: "kinder", ideal: 5, have: 0, name: "Kinder Bueno" },
+      { id: "milk", ideal: 10, have: 0, name: "Milk Chocolate" },
+      { id: "dark", ideal: 8, have: 0, name: "Dark Chocolate" },
+      { id: "terrys", ideal: 8, have: 0, name: "Chocolate Orange" },
+      { id: "mars", ideal: 12, have: 0, name: "Mars Bar" },
+      { id: "nutella", ideal: 10, have: 0, name: "Nutella", extraInfo: "jars" },
+      { id: "peanut", ideal: 1, have: 0, name: "Peanut Butter", extraInfo: "jars" },
+      { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
+      { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
+      { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
+      { id: "maple", ideal: 3, have: 0, name: "Maple Syrup", extraInfo: "2-3 small" },
+      { id: "golden", ideal: 3, have: 0, name: "Golden Syrup", extraInfo: "2-3 small" },
+      { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
+      {
+        id: "sugar",
+        ideal: 1,
+        have: 0,
+        name: "Sugar",
+        extraInfo: "1 open, 1 full",
+        isBoolean: true,
+      },
+      { id: "lemon", ideal: 1, have: 0, name: "Lemon Juice", extraInfo: "1 open, 1 full" },
+      { id: "cinnamon", ideal: 1, have: 0, name: "Cinnamon" },
+      {
+        id: "marshmallows",
+        ideal: 1,
+        have: 0,
+        name: "Marshmallows",
+        extraInfo: "1/2 bag + full container",
+        isBoolean: true,
+      },
+      {
+        id: "appleWithSauce",
+        ideal: 0,
+        have: 0,
+        name: "Apple With Sauce",
+        messageName: "APPLE (with sauce)",
+      },
+      {
+        id: "appleWithoutSauce",
+        ideal: 0,
+        have: 0,
+        name: "Apple Without Sauce",
+        messageName: "APPLE (without sauce)",
+        extraInfo: "Without",
+      },
+      {
+        id: "choppedNuts",
+        ideal: 0,
+        have: 0,
+        name: "Chopped Nuts",
+        extraInfo: "1/2 bag",
+        isBoolean: true,
+      },
+      { id: "walnut", ideal: 1, have: 0, name: "Walnuts", extraInfo: "1/2 bag", isBoolean: true },
+      { id: "passata", ideal: 0, have: 0, name: "Passata", extraInfo: "1 full" },
+      { id: "pesto", ideal: 1, have: 0, name: "Pesto", extraInfo: "full jars" },
+      { id: "oil", ideal: 1, have: 0, name: "Oil", extraInfo: "full" },
+      { id: "bigCones", ideal: 2, have: 0, name: "Big Cones" },
+      { id: "napkins", ideal: 3, have: 0, name: "Napkins" },
+      {
+        id: "smallCones",
+        ideal: 1,
+        have: 0,
+        name: "Small Cones",
+        extraInfo: "1/2 sleeve",
+        isBoolean: true,
+      },
+      { id: "cloths", ideal: 0, have: 0, name: "Cloths" },
+      { id: "foil", ideal: 0, have: 0, name: "Foil", extraInfo: "1/2 roll", isBoolean: true },
+      {
+        id: "rubbishBags",
+        ideal: 0,
+        have: 0,
+        name: "Rubbish Bags",
+        extraInfo: "1/2 roll or 3 bags",
+        isBoolean: true,
+      },
+      { id: "spray", ideal: 2, have: 0, name: "Spray" },
+      {
+        id: "gloves",
+        ideal: 0,
+        have: 0,
+        name: "Gloves (L, M)",
+        extraInfo: "both L and M",
+        isBoolean: true,
+      },
+      {
+        id: "waterForStick",
+        ideal: 0,
+        have: 0,
+        name: "Water for Stick",
+        extraInfo: "1/2 bottle",
+        isBoolean: true,
+      },
+      { id: "roll", ideal: 1, have: 0, name: "Roll", extraInfo: "1 full", isBoolean: true },
+    ],
   }
 
   const [location, setLocation] = useState<"" | "ousegate" | "kings">("")
@@ -107,11 +211,12 @@ export default function App() {
 
   const [haveAmount, setHaveAmount] = useState(0)
 
+  const [finishedList, setFinishedList] = useState("")
+
   function submitAmount() {
     setHaveAmount(0)
     console.log("currently at index", ingredientIndex)
-    console.log("length of ingredients", ingredients.ousegate.length)
-    if (ingredientIndex === ingredients.ousegate.length - 1) {
+    if (location !== "" && ingredientIndex === ingredients[location].length - 1) {
       console.log("going to createMessage")
       createMessage(location)
       setIsDone(true)
@@ -127,19 +232,23 @@ export default function App() {
     if (location === "") {
       throw new Error("No known location to write message for")
     }
-    let text = ""
-    for (let i = 0; i < ingredients.ousegate.length; i++) {
+    let text = `${location.toUpperCase()} CLOSE LIST\n`
+    for (let i = 0; i < ingredients[location].length; i++) {
       const ingredientData = ingredients[location][i]
-      const itemName = ingredientData.messageName ?? ingredientData.id.toUpperCase()
+      const itemName = ingredientData.messageName ?? ingredientData.name.toUpperCase()
       const idealAmount = ingredientData.ideal
       // will never be negative, at most 0
-      const neededAmount = Math.max(0, Number(ingredientData.ideal) - ingredientData.have)
+      const neededAmount =
+        ingredientData.ideal === null
+          ? ""
+          : Math.max(0, Number(ingredientData.ideal) - ingredientData.have)
       try {
         text += `\n${itemName},${idealAmount} - need - ${neededAmount}`
       } catch (err) {
         continue
       }
     }
+    setFinishedList(text)
     navigator.clipboard.writeText(text)
   }
 
@@ -157,12 +266,18 @@ export default function App() {
     }
   }
 
+  function goBack() {
+    if (ingredientIndex > 0) {
+      setIngredientIndex((prev) => prev - 1)
+    }
+  }
+
   function stagedElements(location: "ousegate" | "kings") {
     const currentIngredient = ingredients[location][ingredientIndex]
     const isBoolean = currentIngredient.isBoolean
     return (
-      <div className="mt-8 flex h-svh w-full flex-col items-center gap-12">
-        <p className="capitalize opacity-70">{location}</p>
+      <div className="flex h-svh w-full flex-col items-center gap-12">
+        <p className="mt-8 capitalize opacity-70">{location}</p>
         {isBoolean ? (
           <>
             <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
@@ -177,7 +292,7 @@ export default function App() {
           </>
         ) : (
           <>
-            <p className="font-rounded mt-6 w-full px-12 text-center text-2xl leading-[1.6] font-medium">
+            <p className="font-rounded mt-6 w-full px-14 text-center text-2xl leading-[1.6] font-medium">
               How much{" "}
               <span className="text-blue-500">{ingredients[location][ingredientIndex]?.name}</span>{" "}
               <span className="text-amber-600/80">
@@ -195,18 +310,30 @@ export default function App() {
             <>
               <button
                 onMouseDown={() => {
-                  setIngredientIndex((prev) => prev + 1)
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    setIngredientIndex((prev) => prev + 1)
+                  }
                 }}
-                className="border-shadow font-rounded w-24 rounded-xl py-4 text-xl font-medium text-red-600 ring ring-white/15"
+                className="border-shadow font-rounded w-24 rounded-full py-3.5 text-xl font-medium text-red-600 ring ring-white/15"
               >
                 No
               </button>
               <button
                 onMouseDown={() => {
-                  currentIngredient.have = currentIngredient.ideal
-                  setIngredientIndex((prev) => prev + 1)
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    currentIngredient.have = currentIngredient.ideal
+                    setIngredientIndex((prev) => prev + 1)
+                  }
                 }}
-                className="border-shadow font-rounded w-24 rounded-xl py-4 text-xl font-medium text-blue-600 ring ring-white/15"
+                className="border-shadow font-rounded w-24 rounded-full py-3.5 text-xl font-medium text-blue-600 ring ring-white/15"
               >
                 Yes
               </button>
@@ -228,9 +355,17 @@ export default function App() {
         {!isBoolean && (
           <button
             onMouseDown={submitAmount}
-            className="font-rounded border-shadow mt-10 rounded-full bg-[#18181B] px-6 py-3 text-xl font-medium text-white dark:text-black"
+            className="font-rounded border-shadow mt-2 rounded-full bg-[#18181B] px-6 py-3 text-xl font-medium text-white dark:text-black"
           >
             Submit
+          </button>
+        )}
+        {ingredientIndex > 1 && (
+          <button
+            className="border-shadow mt-auto mb-12 rounded-full px-6 py-2.5 text-lg"
+            onMouseDown={goBack}
+          >
+            Back
           </button>
         )}
       </div>
@@ -262,12 +397,21 @@ export default function App() {
           </div>
         </div>
       )}
-      {location !== "" && stagedElements(location)}
+      {location !== "" && !isDone && stagedElements(location)}
       {isDone && (
-        <div className="flex h-svh flex-col items-center justify-center gap-10">
-          <p className="font-rounded w-full px-8 text-center text-5xl leading-[70px] font-medium">
-            Message Copied!
+        <div className="flex h-svh w-screen flex-col items-center justify-center gap-10">
+          <p className="font-rounded w-full px-8 text-center text-xl leading-17.5 font-medium">
+            List copied:
           </p>
+          <div className="w-full px-12">
+            <textarea
+              name=""
+              id=""
+              className="border-shadow text-foreground block h-80 w-full resize-none rounded-xl bg-white p-3 focus:outline-none dark:bg-[#101010]"
+              readOnly
+              value={finishedList}
+            />
+          </div>
           <button
             onMouseDown={() => {
               setLocation("")
