@@ -191,6 +191,14 @@
   }
 }
 
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
 .shiki,
 .shiki span {
   color: var(--shiki-light);

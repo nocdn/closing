@@ -15,7 +15,7 @@ let ingredients = {
     { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
     { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
     { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
-    { id: "maple", ideal: 0, have: 0, name: "Maple Syrup" },
+    { id: "maple", ideal: 2, have: 0, name: "Maple Syrup" },
     { id: "golden", ideal: 2, have: 0, name: "Golden Syrup" },
     { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     {
@@ -27,13 +27,13 @@ let ingredients = {
       isBoolean: true,
     },
     { id: "lemon", ideal: 1, have: 0, name: "Lemon Juice", extraInfo: "full ones" },
-    { id: "cinnamon", ideal: null, have: 0, name: "Cinnamon Jars", messageName: "CINNAMON" },
+    { id: "cinnamon", ideal: 1, have: 0, name: "Cinnamon Jars", messageName: "CINNAMON" },
     {
       id: "marshmallows",
       ideal: 1,
       have: 0,
       name: "Marshmallows",
-      extraInfo: "at least 1/2 bag",
+      extraInfo: "at least 1/2 bag + full container",
       isBoolean: true,
     },
     {
@@ -56,7 +56,7 @@ let ingredients = {
       have: 0,
       name: "Chopped Nuts",
       messageName: "CHOPPED NUTS",
-      extraInfo: "is there a bag",
+      extraInfo: "at least 1/2 bag",
       isBoolean: true,
     },
     {
@@ -64,7 +64,7 @@ let ingredients = {
       ideal: 1,
       have: 0,
       name: "Walnuts",
-      extraInfo: "some walnuts in the bag",
+      extraInfo: "at least 1/2 bag",
       isBoolean: true,
     },
     { id: "passata", ideal: 1, have: 0, name: "Passata", extraInfo: "full" },
@@ -103,7 +103,7 @@ let ingredients = {
       have: 0,
       name: "Rubbish Bags",
       messageName: "RUBBISH BAGS 1/2 roll",
-      extraInfo: "1/2 roll",
+      extraInfo: "1/2 roll or 3 bags",
       isBoolean: true,
     },
     { id: "spray", ideal: 2, have: 0, name: "Spray" },
@@ -121,15 +121,15 @@ let ingredients = {
       have: 0,
       name: "Water for Stick",
       messageName: "WATER FOR STICK",
-      extraInfo: "is there some water",
+      extraInfo: "1/2 bottle",
       isBoolean: true,
     },
     { id: "roll", ideal: 1, have: 0, name: "Roll" },
   ],
   kings: [
     { id: "kinder", ideal: 5, have: 0, name: "Kinder Bueno" },
-    { id: "milk", ideal: 10, have: 0, name: "Milk Chocolate" },
-    { id: "dark", ideal: 8, have: 0, name: "Dark Chocolate" },
+    { id: "milk", ideal: 10, have: 0, name: "Milk Chocolate", extraInfo: "bars" },
+    { id: "dark", ideal: 8, have: 0, name: "Dark Chocolate", extraInfo: "bars" },
     { id: "terrys", ideal: 8, have: 0, name: "Chocolate Orange" },
     { id: "mars", ideal: 12, have: 0, name: "Mars Bar" },
     { id: "nutella", ideal: 10, have: 0, name: "Nutella", extraInfo: "jars" },
@@ -137,7 +137,7 @@ let ingredients = {
     { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
     { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
     { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
-    { id: "maple", ideal: 3, have: 0, name: "Maple Syrup", extraInfo: "2-3 small" },
+    { id: "maple", ideal: 2, have: 0, name: "Maple Syrup", extraInfo: "2-3 small" },
     { id: "golden", ideal: 3, have: 0, name: "Golden Syrup", extraInfo: "2-3 small" },
     { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     {
@@ -148,43 +148,50 @@ let ingredients = {
       extraInfo: "1 open, 1 full",
       isBoolean: true,
     },
-    { id: "lemon", ideal: 1, have: 0, name: "Lemon Juice", extraInfo: "1 open, 1 full" },
-    { id: "cinnamon", ideal: 1, have: 0, name: "Cinnamon" },
+    { id: "lemon", ideal: 1, have: 0, name: "Lemon Juice", extraInfo: "full ones" },
+    { id: "cinnamon", ideal: 1, have: 0, name: "Cinnamon Jars", messageName: "CINNAMON" },
     {
       id: "marshmallows",
       ideal: 1,
       have: 0,
       name: "Marshmallows",
-      extraInfo: "1/2 bag + full container",
+      extraInfo: "at least 1/2 bag + full container",
       isBoolean: true,
     },
     {
       id: "appleWithSauce",
-      ideal: 0,
+      ideal: 2,
       have: 0,
       name: "Apple With Sauce",
       messageName: "APPLE (with sauce)",
     },
     {
       id: "appleWithoutSauce",
-      ideal: 0,
+      ideal: 1,
       have: 0,
       name: "Apple Without Sauce",
       messageName: "APPLE (without sauce)",
-      extraInfo: "Without",
     },
     {
       id: "choppedNuts",
-      ideal: 0,
+      ideal: 1,
       have: 0,
       name: "Chopped Nuts",
-      extraInfo: "1/2 bag",
+      messageName: "CHOPPED NUTS",
+      extraInfo: "at least 1/2 bag",
       isBoolean: true,
     },
-    { id: "walnut", ideal: 1, have: 0, name: "Walnuts", extraInfo: "1/2 bag", isBoolean: true },
-    { id: "passata", ideal: 0, have: 0, name: "Passata", extraInfo: "1 full" },
-    { id: "pesto", ideal: 1, have: 0, name: "Pesto", extraInfo: "full jars" },
-    { id: "oil", ideal: 1, have: 0, name: "Oil", extraInfo: "full" },
+    {
+      id: "walnut",
+      ideal: 1,
+      have: 0,
+      name: "Walnuts",
+      extraInfo: "at least 1/2 bag",
+      isBoolean: true,
+    },
+    { id: "passata", ideal: 1, have: 0, name: "Passata", extraInfo: "full" },
+    { id: "pesto", ideal: 2, have: 0, name: "Pesto Jars", extraInfo: "full" },
+    { id: "oil", ideal: 1, have: 0, name: "Oil", extraInfo: "full bottles" },
     { id: "bigCones", ideal: 2, have: 0, name: "Big Cones" },
     { id: "napkins", ideal: 3, have: 0, name: "Napkins" },
     {
@@ -195,34 +202,43 @@ let ingredients = {
       extraInfo: "1/2 sleeve",
       isBoolean: true,
     },
-    { id: "cloths", ideal: 0, have: 0, name: "Cloths" },
-    { id: "foil", ideal: 0, have: 0, name: "Foil", extraInfo: "1/2 roll", isBoolean: true },
+    { id: "cloths", ideal: 3, have: 0, name: "Cloths" },
+    {
+      id: "foil",
+      ideal: 1,
+      have: 0,
+      name: "Foil",
+      isBoolean: true,
+      extraInfo: "enough in the roll for next day",
+    },
     {
       id: "rubbishBags",
-      ideal: 0,
+      ideal: 1,
       have: 0,
       name: "Rubbish Bags",
+      messageName: "RUBBISH BAGS 1/2 roll",
       extraInfo: "1/2 roll or 3 bags",
       isBoolean: true,
     },
     { id: "spray", ideal: 2, have: 0, name: "Spray" },
     {
       id: "gloves",
-      ideal: 0,
+      ideal: 2,
       have: 0,
       name: "Gloves (L, M)",
-      extraInfo: "both L and M",
+      extraInfo: "both sizes",
       isBoolean: true,
     },
     {
       id: "waterForStick",
-      ideal: 0,
+      ideal: 1,
       have: 0,
       name: "Water for Stick",
+      messageName: "WATER FOR STICK",
       extraInfo: "1/2 bottle",
       isBoolean: true,
     },
-    { id: "roll", ideal: 1, have: 0, name: "Roll", extraInfo: "1 full", isBoolean: true },
+    { id: "roll", ideal: 1, have: 0, name: "Roll" },
   ],
 }
 
@@ -345,6 +361,7 @@ export default function App() {
             <>
               <button
                 onMouseDown={() => {
+                  trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
                     setIsDone(true)
@@ -353,12 +370,13 @@ export default function App() {
                     setIngredientIndex((prev) => prev + 1)
                   }
                 }}
-                className="border-shadow font-rounded w-24 rounded-full py-3.5 text-xl font-medium text-red-600 ring ring-white/15"
+                className="font-rounded w-24 rounded-full px-6 py-3 text-xl font-medium text-red-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 No
               </button>
               <button
                 onMouseDown={() => {
+                  trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
                     setIsDone(true)
@@ -368,7 +386,7 @@ export default function App() {
                     setIngredientIndex((prev) => prev + 1)
                   }
                 }}
-                className="border-shadow font-rounded w-24 rounded-full py-3.5 text-xl font-medium text-blue-600 ring ring-white/15"
+                className="font-rounded w-24 rounded-full px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 Yes
               </button>
@@ -403,7 +421,7 @@ export default function App() {
         )}
         {ingredientIndex > 0 && (
           <button
-            className="border-shadow mt-auto mb-12 rounded-full px-6 py-2.5 text-lg"
+            className="font-rounded border-shadow mt-auto mb-12 rounded-full bg-[#18181B] px-6 py-3 text-[17px] font-medium text-white active:opacity-40 dark:text-white"
             onMouseDown={goBack}
           >
             Back
