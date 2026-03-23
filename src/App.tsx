@@ -223,10 +223,9 @@ let ingredients = {
     { id: "spray", ideal: 2, have: 0, name: "Spray" },
     {
       id: "gloves",
-      ideal: 2,
+      ideal: 1,
       have: 0,
       name: "Gloves (L, M)",
-      extraInfo: "both sizes",
       isBoolean: true,
     },
     {
@@ -251,6 +250,8 @@ export default function App() {
 
   const [finishedList, setFinishedList] = useState("")
   const [copied, setCopied] = useState(false)
+
+  const [glovesNeeded, setGlovesNeeded] = useState<"" | "L" | "M" | "L + M">("")
 
   const { trigger } = useWebHaptics()
 
@@ -280,14 +281,22 @@ export default function App() {
       const itemName = ingredientData.messageName ?? ingredientData.id.toUpperCase()
       // const idealAmount = ingredientData.ideal
       // will never be negative, at most 0
-      const neededAmount =
-        ingredientData.ideal === null
-          ? ""
-          : Math.max(0, Number(ingredientData.ideal) - ingredientData.have)
-      try {
-        text += `\n${itemName} - need - ${neededAmount}`
-      } catch (err) {
-        continue
+      if (ingredientData.id === "gloves") {
+        try {
+          text += `\n${itemName} - need - ${glovesNeeded}`
+        } catch (err) {
+          continue
+        }
+      } else {
+        const neededAmount =
+          ingredientData.ideal === null
+            ? ""
+            : Math.max(0, Number(ingredientData.ideal) - ingredientData.have)
+        try {
+          text += `\n${itemName} - need - ${neededAmount}`
+        } catch (err) {
+          continue
+        }
       }
     }
     setFinishedList(text)
@@ -326,6 +335,7 @@ export default function App() {
   function stagedElements(location: "ousegate" | "kings") {
     const currentIngredient = ingredients[location][ingredientIndex]
     const isBoolean = currentIngredient.isBoolean
+    const isGloves = currentIngredient.id == "gloves"
     return (
       <div className="flex h-svh w-full flex-col items-center gap-12">
         <p className="font-rounded mt-8 capitalize opacity-70">{location}</p>
@@ -357,7 +367,7 @@ export default function App() {
         )}
 
         <div className="flex items-center gap-8">
-          {isBoolean ? (
+          {isBoolean && !isGloves && (
             <>
               <button
                 onMouseDown={() => {
@@ -370,7 +380,7 @@ export default function App() {
                     setIngredientIndex((prev) => prev + 1)
                   }
                 }}
-                className="font-rounded w-24 rounded-full px-6 py-3 text-xl font-medium text-red-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+                className="font-rounded w-24 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-red-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 No
               </button>
@@ -386,12 +396,13 @@ export default function App() {
                     setIngredientIndex((prev) => prev + 1)
                   }
                 }}
-                className="font-rounded w-24 rounded-full px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+                className="font-rounded w-24 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 Yes
               </button>
             </>
-          ) : (
+          )}{" "}
+          {!isBoolean && (
             <>
               <button
                 className="rounded-xl p-5 ring ring-white/15 dark:ring-0"
@@ -407,6 +418,76 @@ export default function App() {
                 onMouseDown={increaseAmount}
               >
                 <Plus size={30} />
+              </button>
+            </>
+          )}
+          {isGloves && (
+            <>
+              <button
+                onMouseDown={() => {
+                  trigger()
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    setGlovesNeeded("M")
+                    setIngredientIndex((prev) => prev + 1)
+                  }
+                }}
+                className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+              >
+                <span className="mr-1 opacity-30">Need:</span>{" "}
+                <span className="font-semibold">M</span>
+              </button>
+
+              <button
+                onMouseDown={() => {
+                  trigger()
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    setGlovesNeeded("L")
+                    setIngredientIndex((prev) => prev + 1)
+                  }
+                }}
+                className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+              >
+                <span className="mr-1 opacity-30">Need:</span>
+                <span className="font-semibold">L</span>
+              </button>
+              <button
+                onMouseDown={() => {
+                  trigger()
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    setGlovesNeeded("L + M")
+                    setIngredientIndex((prev) => prev + 1)
+                  }
+                }}
+                className="font-rounded rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+              >
+                Both Needed
+              </button>
+              <button
+                onMouseDown={() => {
+                  trigger()
+                  if (ingredientIndex === ingredients[location].length - 1) {
+                    createMessage(location)
+                    setIsDone(true)
+                    setLocation("")
+                  } else {
+                    setIngredientIndex((prev) => prev + 1)
+                  }
+                }}
+                className="font-rounded rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+              >
+                Neither Needed
               </button>
             </>
           )}
@@ -468,7 +549,7 @@ export default function App() {
             <textarea
               name=""
               id=""
-              className="border-shadow text-foreground block h-80 w-full resize-none rounded-xl bg-white p-3 focus:outline-none dark:bg-[#101010]"
+              className="border-shadow text-foreground block h-80 w-full resize-none overscroll-auto! rounded-xl bg-white p-3 focus:outline-none dark:bg-[#101010]"
               readOnly
               value={finishedList}
             />
