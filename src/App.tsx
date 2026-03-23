@@ -271,6 +271,12 @@ export default function App() {
     console.log(ingredients)
   }
 
+  function finished() {
+    trigger([{ duration: 30 }, { delay: 60, duration: 40, intensity: 1 }])
+    setIsDone(true)
+    setLocation("")
+  }
+
   function createMessage(location: "ousegate" | "kings" | "") {
     if (location === "") {
       throw new Error("No known location to write message for")
@@ -374,8 +380,7 @@ export default function App() {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
+                    finished()
                   } else {
                     setIngredientIndex((prev) => prev + 1)
                   }
@@ -389,8 +394,7 @@ export default function App() {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
+                    finished()
                   } else {
                     currentIngredient.have = currentIngredient.ideal
                     setIngredientIndex((prev) => prev + 1)
@@ -422,49 +426,48 @@ export default function App() {
             </>
           )}
           {isGloves && (
-            <>
-              <button
-                onMouseDown={() => {
-                  trigger()
-                  if (ingredientIndex === ingredients[location].length - 1) {
-                    createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
-                  } else {
-                    setGlovesNeeded("M")
-                    setIngredientIndex((prev) => prev + 1)
-                  }
-                }}
-                className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
-              >
-                <span className="mr-1 opacity-30">Need:</span>{" "}
-                <span className="font-semibold">M</span>
-              </button>
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex items-center gap-6">
+                <button
+                  onMouseDown={() => {
+                    trigger()
+                    if (ingredientIndex === ingredients[location].length - 1) {
+                      createMessage(location)
+                      finished()
+                    } else {
+                      setGlovesNeeded("M")
+                      setIngredientIndex((prev) => prev + 1)
+                    }
+                  }}
+                  className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+                >
+                  <span className="mr-1 opacity-30">Need:</span>{" "}
+                  <span className="font-medium">M</span>
+                </button>
 
+                <button
+                  onMouseDown={() => {
+                    trigger()
+                    if (ingredientIndex === ingredients[location].length - 1) {
+                      createMessage(location)
+                      finished()
+                    } else {
+                      setGlovesNeeded("L")
+                      setIngredientIndex((prev) => prev + 1)
+                    }
+                  }}
+                  className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
+                >
+                  <span className="mr-1 opacity-30">Need:</span>
+                  <span className="font-semibold">L</span>
+                </button>
+              </div>
               <button
                 onMouseDown={() => {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
-                  } else {
-                    setGlovesNeeded("L")
-                    setIngredientIndex((prev) => prev + 1)
-                  }
-                }}
-                className="font-rounded flex items-center gap-1 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
-              >
-                <span className="mr-1 opacity-30">Need:</span>
-                <span className="font-semibold">L</span>
-              </button>
-              <button
-                onMouseDown={() => {
-                  trigger()
-                  if (ingredientIndex === ingredients[location].length - 1) {
-                    createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
+                    finished()
                   } else {
                     setGlovesNeeded("L + M")
                     setIngredientIndex((prev) => prev + 1)
@@ -479,8 +482,7 @@ export default function App() {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
-                    setIsDone(true)
-                    setLocation("")
+                    finished()
                   } else {
                     setIngredientIndex((prev) => prev + 1)
                   }
@@ -489,7 +491,7 @@ export default function App() {
               >
                 Neither Needed
               </button>
-            </>
+            </div>
           )}
         </div>
         {!isBoolean && (
