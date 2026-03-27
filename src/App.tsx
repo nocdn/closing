@@ -199,6 +199,7 @@ let ingredients = {
       ideal: 1,
       have: 0,
       name: "Small Cones",
+      messageName: "SMALL CONES",
       extraInfo: "1/2 sleeve",
       isBoolean: true,
     },
@@ -241,6 +242,16 @@ let ingredients = {
   ],
 }
 
+const numberFlowFastTiming = {
+  duration: 190,
+  easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+}
+
+const numberFlowOpacityTiming = {
+  duration: 120,
+  easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+}
+
 export default function App() {
   const [location, setLocation] = useState<"" | "ousegate" | "kings">("")
   const [isDone, setIsDone] = useState(false)
@@ -281,7 +292,14 @@ export default function App() {
     if (location === "") {
       throw new Error("No known location to write message for")
     }
-    let text = `${location.toUpperCase()} CLOSE LIST\n`
+    const d = new Date()
+    const dateStr =
+      String(d.getDate()).padStart(2, "0") +
+      "/" +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      "/" +
+      d.getFullYear()
+    let text = `${location.toUpperCase()} CLOSE LIST - ${dateStr}\n`
     for (let i = 0; i < ingredients[location].length; i++) {
       const ingredientData = ingredients[location][i]
       const itemName = ingredientData.messageName ?? ingredientData.id.toUpperCase()
@@ -411,15 +429,23 @@ export default function App() {
               <button
                 className="rounded-xl p-5 ring ring-white/15 dark:ring-0"
                 onMouseDown={decreaseAmount}
+                style={{ opacity: haveAmount > 0 ? 1.0 : 0.3 }}
               >
                 <Minus size={30} />
               </button>
               <div className="grid w-12 place-content-center text-4xl">
-                <NumberFlow value={haveAmount} />
+                <NumberFlow
+                  value={haveAmount}
+                  transformTiming={numberFlowFastTiming}
+                  spinTiming={numberFlowFastTiming}
+                  opacityTiming={numberFlowOpacityTiming}
+                  willChange
+                />
               </div>
               <button
-                className="rounded-xl p-5 ring ring-white/15 dark:ring-0"
+                className="rounded-xl p-5 ring ring-white/15 transition-opacity dark:ring-0"
                 onMouseDown={increaseAmount}
+                style={{ opacity: haveAmount < 10 ? 1.0 : 0.3 }}
               >
                 <Plus size={30} />
               </button>
