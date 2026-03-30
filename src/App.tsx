@@ -623,22 +623,22 @@ export default function App() {
             >
               {copied ? "Copied" : "Copy"}
             </button>
-            {/* {ios && ( */}
-            <a
-              href="sms:"
-              onMouseDown={() => {
-                navigator.clipboard.writeText(finishedList)
-                trigger()
-                setCopied(true)
-                setTimeout(() => {
-                  setCopied(false)
-                }, 1000)
-              }}
-              className="border-shadow font-rounded flex w-29 items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
-            >
-              Send <StreamlineLogosImessageLogoSolid color="#1D8BFF" />
-            </a>
-            {/* )} */}
+            {ios && (
+              <a
+                href="sms:"
+                onMouseDown={() => {
+                  navigator.clipboard.writeText(finishedList)
+                  trigger()
+                  setCopied(true)
+                  setTimeout(() => {
+                    setCopied(false)
+                  }, 1000)
+                }}
+                className="border-shadow font-rounded flex w-29 items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
+              >
+                Send <StreamlineLogosImessageLogoSolid color="#1D8BFF" />
+              </a>
+            )}
           </div>
           <button
             onMouseDown={() => {
