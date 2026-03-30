@@ -604,22 +604,26 @@ export default function App() {
               id=""
               className="border-shadow text-foreground block h-80 w-full resize-none overscroll-auto! rounded-xl bg-white p-3 focus:outline-none dark:bg-[#101010]"
               value={finishedList}
+              onChange={(e) => {
+                setFinishedList(e.currentTarget.value)
+              }}
             />
           </div>
-          <button
-            onMouseDown={() => {
-              navigator.clipboard.writeText(finishedList)
-              trigger()
-              setCopied(true)
-              setTimeout(() => {
-                setCopied(false)
-              }, 1000)
-            }}
-            className="border-shadow font-rounded rounded-full bg-[#FEFEFE] px-6 py-3 text-lg font-medium dark:text-black"
-          >
-            {copied ? "Copied" : "Copy"}
-          </button>
-          {ios && (
+          <div className="flex items-center gap-6">
+            <button
+              onMouseDown={() => {
+                navigator.clipboard.writeText(finishedList)
+                trigger()
+                setCopied(true)
+                setTimeout(() => {
+                  setCopied(false)
+                }, 1000)
+              }}
+              className="border-shadow font-rounded w-29 rounded-full bg-[#FEFEFE] px-6 py-3 text-lg font-medium dark:text-black"
+            >
+              {copied ? "Copied" : "Copy"}
+            </button>
+            {/* {ios && ( */}
             <a
               href="sms:"
               onMouseDown={() => {
@@ -630,11 +634,12 @@ export default function App() {
                   setCopied(false)
                 }, 1000)
               }}
-              className="border-shadow font-rounded flex items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
+              className="border-shadow font-rounded flex w-29 items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
             >
               Send <StreamlineLogosImessageLogoSolid color="#1D8BFF" />
             </a>
-          )}
+            {/* )} */}
+          </div>
           <button
             onMouseDown={() => {
               trigger()
