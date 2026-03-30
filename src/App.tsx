@@ -2,6 +2,7 @@ import NumberFlow from "@number-flow/react"
 import { Minus, Plus } from "lucide-react"
 import { useState } from "react"
 import { useWebHaptics } from "web-haptics/react"
+import { StreamlineLogosImessageLogoSolid } from "./icons/imessage"
 
 let ingredients = {
   ousegate: [
@@ -15,9 +16,9 @@ let ingredients = {
     { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
     { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
     { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
+    { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     { id: "maple", ideal: 2, have: 0, name: "Maple Syrup" },
     { id: "golden", ideal: 2, have: 0, name: "Golden Syrup" },
-    { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     {
       id: "sugar",
       ideal: 1,
@@ -137,9 +138,9 @@ let ingredients = {
     { id: "biscoff", ideal: 3, have: 0, name: "Biscoff", extraInfo: "jars" },
     { id: "toffee", ideal: 1, have: 0, name: "Toffee Sauce" },
     { id: "salted", ideal: 1, have: 0, name: "Salted Caramel" },
+    { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     { id: "maple", ideal: 2, have: 0, name: "Maple Syrup", extraInfo: "2-3 small" },
     { id: "golden", ideal: 3, have: 0, name: "Golden Syrup", extraInfo: "2-3 small" },
-    { id: "strawberry", ideal: 1, have: 0, name: "Strawberry Sauce" },
     {
       id: "sugar",
       ideal: 1,
@@ -252,6 +253,13 @@ const numberFlowOpacityTiming = {
   easing: "cubic-bezier(0.22, 1, 0.36, 1)",
 }
 
+function isIOS() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  )
+}
+
 export default function App() {
   const [location, setLocation] = useState<"" | "ousegate" | "kings">("")
   const [isDone, setIsDone] = useState(false)
@@ -265,6 +273,8 @@ export default function App() {
   const [glovesNeeded, setGlovesNeeded] = useState<"" | "L" | "M" | "L + M">("")
 
   const { trigger } = useWebHaptics()
+
+  const ios = isIOS()
 
   function submitAmount() {
     setHaveAmount(0)
@@ -299,7 +309,7 @@ export default function App() {
       String(d.getMonth() + 1).padStart(2, "0") +
       "/" +
       d.getFullYear()
-    let text = `${location.toUpperCase()} CLOSE LIST - ${dateStr}\n`
+    let text = `${location.toUpperCase()} CLOSE LIST\n${dateStr}\n`
     for (let i = 0; i < ingredients[location].length; i++) {
       const ingredientData = ingredients[location][i]
       const itemName = ingredientData.messageName ?? ingredientData.id.toUpperCase()
@@ -307,7 +317,11 @@ export default function App() {
       // will never be negative, at most 0
       if (ingredientData.id === "gloves") {
         try {
-          text += `\n${itemName} - need - ${glovesNeeded}`
+          if (glovesNeeded === "") {
+            text += `\n${itemName}`
+          } else {
+            text += `\n${itemName} - need ${glovesNeeded}`
+          }
         } catch (err) {
           continue
         }
@@ -317,7 +331,11 @@ export default function App() {
             ? ""
             : Math.max(0, Number(ingredientData.ideal) - ingredientData.have)
         try {
-          text += `\n${itemName} - need - ${neededAmount}`
+          if (neededAmount === 0) {
+            text += `\n${itemName}`
+          } else {
+            text += `\n${itemName} - need ${neededAmount}`
+          }
         } catch (err) {
           continue
         }
@@ -353,6 +371,13 @@ export default function App() {
     trigger()
     if (ingredientIndex > 0) {
       setIngredientIndex((prev) => prev - 1)
+      // further on, will still read the old value since react hasn't updated
+      // getting the current state is the value for this render
+      if (location === "") return
+
+      const previousIndex = ingredientIndex - 1
+      const item = ingredients[location][previousIndex]
+      setHaveAmount(item.have)
     }
   }
 
@@ -578,7 +603,6 @@ export default function App() {
               name=""
               id=""
               className="border-shadow text-foreground block h-80 w-full resize-none overscroll-auto! rounded-xl bg-white p-3 focus:outline-none dark:bg-[#101010]"
-              readOnly
               value={finishedList}
             />
           </div>
@@ -595,6 +619,22 @@ export default function App() {
           >
             {copied ? "Copied" : "Copy"}
           </button>
+          {ios && (
+            <a
+              href="sms:"
+              onMouseDown={() => {
+                navigator.clipboard.writeText(finishedList)
+                trigger()
+                setCopied(true)
+                setTimeout(() => {
+                  setCopied(false)
+                }, 1000)
+              }}
+              className="border-shadow font-rounded flex items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
+            >
+              Send <StreamlineLogosImessageLogoSolid color="#1D8BFF" />
+            </a>
+          )}
           <button
             onMouseDown={() => {
               trigger()
