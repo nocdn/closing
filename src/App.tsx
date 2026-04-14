@@ -342,7 +342,7 @@ export default function App() {
       }
     }
     setFinishedList(text)
-    navigator.clipboard.writeText(finishedList)
+    navigator.clipboard?.writeText(finishedList).catch(() => {})
   }
 
   function increaseAmount() {
@@ -612,7 +612,7 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button
               onMouseDown={() => {
-                navigator.clipboard.writeText(finishedList)
+                navigator.clipboard?.writeText(finishedList).catch(() => {})
                 trigger()
                 setCopied(true)
                 setTimeout(() => {
@@ -627,7 +627,7 @@ export default function App() {
               <a
                 href="sms:"
                 onMouseDown={() => {
-                  navigator.clipboard.writeText(finishedList)
+                  navigator.clipboard?.writeText(finishedList).catch(() => {})
                   trigger()
                   setCopied(true)
                   setTimeout(() => {
