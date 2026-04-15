@@ -419,7 +419,7 @@ export default function App() {
           {isBoolean && !isGloves && (
             <>
               <button
-                onMouseDown={() => {
+                onPointerDown={() => {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
@@ -433,7 +433,7 @@ export default function App() {
                 No
               </button>
               <button
-                onMouseDown={() => {
+                onPointerDown={() => {
                   trigger()
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
@@ -453,7 +453,7 @@ export default function App() {
             <>
               <button
                 className="rounded-xl p-5 ring ring-white/15 dark:ring-0"
-                onMouseDown={decreaseAmount}
+                onPointerDown={decreaseAmount}
                 style={{ opacity: haveAmount > 0 ? 1.0 : 0.3 }}
               >
                 <Minus size={30} />
@@ -469,7 +469,7 @@ export default function App() {
               </div>
               <button
                 className="rounded-xl p-5 ring ring-white/15 transition-opacity dark:ring-0"
-                onMouseDown={increaseAmount}
+                onPointerDown={increaseAmount}
                 style={{ opacity: haveAmount < 10 ? 1.0 : 0.3 }}
               >
                 <Plus size={30} />
@@ -547,7 +547,7 @@ export default function App() {
         </div>
         {!isBoolean && (
           <button
-            onMouseDown={submitAmount}
+            onPointerDown={submitAmount}
             className="font-rounded border-shadow mt-2 rounded-full bg-[#18181B] px-6 py-3 text-xl font-medium text-white active:opacity-40 dark:text-white"
           >
             Submit
@@ -556,7 +556,7 @@ export default function App() {
         {ingredientIndex > 0 && (
           <button
             className="font-rounded border-shadow mt-auto mb-12 rounded-full bg-[#18181B] px-6 py-3 text-[17px] font-medium text-white active:opacity-40 dark:text-white"
-            onMouseDown={goBack}
+            onPointerDown={goBack}
           >
             Back
           </button>
@@ -571,7 +571,7 @@ export default function App() {
         <div className="grid h-svh w-screen place-content-center">
           <div id="buttons-container" className="flex flex-col items-center justify-center gap-5">
             <button
-              onMouseDown={() => {
+              onPointerDown={() => {
                 trigger()
                 setLocation("ousegate")
               }}
@@ -581,7 +581,7 @@ export default function App() {
             </button>
             <p>or</p>
             <button
-              onMouseDown={() => {
+              onPointerDown={() => {
                 trigger()
                 setLocation("kings")
               }}
@@ -626,14 +626,6 @@ export default function App() {
             {ios && (
               <a
                 href="sms:"
-                onMouseDown={() => {
-                  navigator.clipboard?.writeText(finishedList).catch(() => {})
-                  trigger()
-                  setCopied(true)
-                  setTimeout(() => {
-                    setCopied(false)
-                  }, 1000)
-                }}
                 className="border-shadow font-rounded flex w-29 items-center gap-2 rounded-full bg-[#FEFEFE] py-3 pr-5 pl-6 text-lg font-medium dark:text-black"
               >
                 Send <StreamlineLogosImessageLogoSolid color="#1D8BFF" />
