@@ -1,6 +1,6 @@
 import NumberFlow from "@number-flow/react"
 import { Minus, Plus } from "lucide-react"
-import { useState } from "react"
+import { type PointerEvent as ReactPointerEvent, useState } from "react"
 import { useWebHaptics } from "web-haptics/react"
 import { StreamlineLogosImessageLogoSolid } from "./icons/imessage"
 
@@ -276,9 +276,21 @@ export default function App() {
 
   const ios = isIOS()
 
+  function triggerHaptics() {
+    void trigger()
+  }
+
+  function handlePressStart(action: () => void) {
+    return (event: ReactPointerEvent<HTMLElement>) => {
+      if (event.pointerType !== "touch") {
+        triggerHaptics()
+      }
+      action()
+    }
+  }
+
   function submitAmount() {
     setHaveAmount(0)
-    trigger()
     console.log("currently at index", ingredientIndex)
     if (location !== "" && ingredientIndex === ingredients[location].length - 1) {
       console.log("going to createMessage")
@@ -368,7 +380,6 @@ export default function App() {
   }
 
   function goBack() {
-    trigger()
     if (ingredientIndex > 0) {
       setIngredientIndex((prev) => prev - 1)
       // further on, will still read the old value since react hasn't updated
@@ -419,22 +430,22 @@ export default function App() {
           {isBoolean && !isGloves && (
             <>
               <button
-                onPointerDown={() => {
-                  trigger()
+                onTouchStart={triggerHaptics}
+                onPointerDown={handlePressStart(() => {
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
                     finished()
                   } else {
                     setIngredientIndex((prev) => prev + 1)
                   }
-                }}
+                })}
                 className="font-rounded w-24 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-red-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 No
               </button>
               <button
-                onPointerDown={() => {
-                  trigger()
+                onTouchStart={triggerHaptics}
+                onPointerDown={handlePressStart(() => {
                   if (ingredientIndex === ingredients[location].length - 1) {
                     createMessage(location)
                     finished()
@@ -442,7 +453,7 @@ export default function App() {
                     currentIngredient.have = currentIngredient.ideal
                     setIngredientIndex((prev) => prev + 1)
                   }
-                }}
+                })}
                 className="font-rounded w-24 rounded-full bg-[#f0f0f09f] px-6 py-3 text-xl font-medium text-blue-600 ring ring-white/7 active:opacity-40 dark:bg-[#18181B]"
               >
                 Yes
@@ -453,7 +464,8 @@ export default function App() {
             <>
               <button
                 className="rounded-xl p-5 ring ring-white/15 dark:ring-0"
-                onPointerDown={decreaseAmount}
+                onTouchStart={triggerHaptics}
+                onPointerDown={handlePressStart(decreaseAmount)}
                 style={{ opacity: haveAmount > 0 ? 1.0 : 0.3 }}
               >
                 <Minus size={30} />
@@ -469,7 +481,8 @@ export default function App() {
               </div>
               <button
                 className="rounded-xl p-5 ring ring-white/15 transition-opacity dark:ring-0"
-                onPointerDown={increaseAmount}
+                onTouchStart={triggerHaptics}
+                onPointerDown={handlePressStart(increaseAmount)}
                 style={{ opacity: haveAmount < 10 ? 1.0 : 0.3 }}
               >
                 <Plus size={30} />
@@ -547,7 +560,8 @@ export default function App() {
         </div>
         {!isBoolean && (
           <button
-            onPointerDown={submitAmount}
+            onTouchStart={triggerHaptics}
+            onPointerDown={handlePressStart(submitAmount)}
             className="font-rounded border-shadow mt-2 rounded-full bg-[#18181B] px-6 py-3 text-xl font-medium text-white active:opacity-40 dark:text-white"
           >
             Submit
@@ -556,7 +570,8 @@ export default function App() {
         {ingredientIndex > 0 && (
           <button
             className="font-rounded border-shadow mt-auto mb-12 rounded-full bg-[#18181B] px-6 py-3 text-[17px] font-medium text-white active:opacity-40 dark:text-white"
-            onPointerDown={goBack}
+            onTouchStart={triggerHaptics}
+            onPointerDown={handlePressStart(goBack)}
           >
             Back
           </button>
@@ -571,20 +586,20 @@ export default function App() {
         <div className="grid h-svh w-screen place-content-center">
           <div id="buttons-container" className="flex flex-col items-center justify-center gap-5">
             <button
-              onPointerDown={() => {
-                trigger()
+              onTouchStart={triggerHaptics}
+              onPointerDown={handlePressStart(() => {
                 setLocation("ousegate")
-              }}
+              })}
               className="border-shadow w-30 rounded-full bg-white py-3 font-medium text-gray-900 transition-transform duration-100 active:scale-[0.98]"
             >
               Ousegate
             </button>
             <p>or</p>
             <button
-              onPointerDown={() => {
-                trigger()
+              onTouchStart={triggerHaptics}
+              onPointerDown={handlePressStart(() => {
                 setLocation("kings")
-              }}
+              })}
               className="border-shadow w-30 rounded-full bg-white py-3 font-medium text-gray-900 transition-transform duration-100 active:scale-[0.98]"
             >
               Kings
