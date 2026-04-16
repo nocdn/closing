@@ -583,7 +583,7 @@ export default function App() {
   return (
     <main className="flex flex-col items-center text-[16px]">
       {location === "" && !isDone && (
-        <div className="grid h-svh w-screen place-content-center">
+        <div className="relative grid h-svh w-screen place-content-center">
           <div id="buttons-container" className="flex flex-col items-center justify-center gap-5">
             <button
               onTouchStart={triggerHaptics}
@@ -605,6 +605,9 @@ export default function App() {
               Kings
             </button>
           </div>
+          <p className="font-rounded absolute top-2 left-2 font-medium text-gray-500 opacity-[0.01]">
+            font
+          </p>
         </div>
       )}
       {location !== "" && !isDone && stagedElements(location)}
